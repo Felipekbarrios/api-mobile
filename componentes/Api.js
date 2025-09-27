@@ -1,131 +1,103 @@
-const API_URL = "https://apiestoque.webapptech.site/api/produtos";
-import { Alert } from "react-native";
+import { Alert } from 'react-native';
 
-export const fetchEstoque = async (setRegistros) => {
+const API_URL = 'https://suaapi.webapi.com/api/produtos'; // URL de exemplo
+
+// GET
+export const getProdutos = async () => {
   try {
     const response = await fetch(API_URL);
     if (!response.ok) {
-      throw new Error("Erro ao buscar o Estoque");
+      // Tenta ler a mensagem de erro do corpo da resposta, se disponível
+      const errorText = await response.text();
+      throw new Error(`Erro ao buscar os produtos: ${response.status} - ${errorText}`);
     }
-    const data = await response.json();
-    console.log("Estoques recebidos da API:", data);
-    setRegistros(data.data);
+    
+    // Retorna os dados em formato JSON
+    return await response.json();
   } catch (error) {
-    console.error("Erro ao buscar o Estoque:", error);
-    throw error;
+    console.error('Erro ao buscar produtos:', error.message);
+    Alert.alert('Erro', 'Não foi possível buscar os produtos.');
+    return []; // Retorna um array vazio em caso de falha
   }
 };
 
-export const createEstoque = async (EstoqueData) => {
+// POST
+export const createProdutos = async (produto) => {
   try {
     const response = await fetch(API_URL, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(EstoqueData),
+      body: JSON.stringify(produto),
     });
 
-    if (response.status === 204) {
-      Alert.alert("Sucesso!", "Cadastro realizado com sucesso!");
-      return {};
-    }
-
-    const textResponse = await response.text();
-    console.log("Resposta bruta da API:", textResponse);
-
-    let responseData;
-    try {
-      responseData = JSON.parse(textResponse);
-    } catch (error) {
-      console.warn("A resposta não é um JSON válido.");
-      responseData = null;
-    }
-
-    if (!response.ok || !responseData) {
-      throw new Error(responseData?.message || "Erro desconhecido na API");
-    }
-
-    return responseData;
-  } catch (error) {
-    console.error("Erro ao cadastrar o Estoque:", error.message);
-    Alert.alert("Erro ao cadastrar", `Detalhes: ${error.message}`);
-    return null;
-  }
-};
-
-export const deleteEstoque = async (EstoqueId, setRegistros, navigation) => {
-  try {
-    const response = await fetch(`${API_URL}/${EstoqueId}`, {
-      method: "DELETE",
-    });
-
-    if (response.ok) {
-      const responseData = await response.json();
-
-      if (responseData.success) {
-        Alert.alert("Sucesso!", responseData.message);
-        setRegistros((prevRegistros) => {
-          const novaLista = prevRegistros.filter(
-            (Estoques) => Estoques.codigo !== EstoqueId
-          );
-          console.log("Nova lista de Estoques:", novaLista);
-          return novaLista;
-        });
-      } else {
-        Alert.alert("Erro", responseData.message);
-      }
+    if (response.status === 201) {
+      // 201 Created
+      // Retorna o produto adicionado ou uma confirmação
+      return await response.json();
     } else {
-      const textResponse = await response.text();
-      let responseData = null;
-
-      try {
-        responseData = JSON.parse(textResponse);
-      } catch (error) {
-        console.warn("A resposta não é um JSON válido.");
-      }
-
-      throw new Error(
-        responseData?.message || "Erro desconhecido ao excluir o Estoque"
-      );
+      // Tenta ler a mensagem de erro
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Erro ao cadastrar: Status ${response.status}`);
     }
   } catch (error) {
-    console.error("Erro ao excluir Estoque:", error.message);
-    Alert.alert("Erro ao excluir", `Detalhes: ${error.message}`);
+    console.error('Erro ao cadastrar produto:', error.message);
+    // Remove o Alert do catch, pois ele parece estar na função chamadora no código original
+    // Alert.alert('Erro', 'Ocorreu um erro ao tentar cadastrar.');
+    return null; 
   }
 };
 
-export const updateEstoque = async (EstoqueId, updatedData, navigation) => {
+// DELETE
+export const deleteProduto = async (id) => {
   try {
-    const response = await fetch(`${API_URL}/${EstoqueId}`, {
-      method: "PUT",
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (response.status === 200 || response.status === 204) {
+      // 200 OK ou 204 No Content
+      Alert.alert('Sucesso!', `O produto com ID ${id} foi excluído com sucesso.`);
+      return true;
+    } else if (response.status === 404) {
+       Alert.alert('Erro', `Produto com ID ${id} não encontrado.`);
+       return false;
+    } else {
+      const errorText = await response.text();
+      throw new Error(`Falha ao excluir o produto: Status ${response.status} - ${errorText}`);
+    }
+  } catch (error) {
+    console.error('Erro ao excluir produto:', error.message);
+    Alert.alert('Erro', 'Não foi possível excluir o produto.');
+    // A função original tinha uma lógica de erro mais complexa, mas simplifiquei para o essencial.
+    return false;
+  }
+};
+
+// PUT/PATCH
+export const updateProdutos = async (id, updatedData, navigation) => {
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'PUT', // ou 'PATCH' dependendo da API
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(updatedData),
     });
 
-    console.log("Dados enviados:", updatedData);
-
     if (response.status === 200) {
-      Alert.alert("Sucesso!", "Estoque atualizado com sucesso!");
-      navigation.navigate("Home");
+      Alert.alert('Sucesso!', 'Produto atualizado com sucesso!', [
+        { text: 'OK', onPress: () => navigation.navigate('Home') }
+      ]);
+      return await response.json();
     } else {
-      const textResponse = await response.text();
-      let responseData;
-      try {
-        responseData = JSON.parse(textResponse);
-      } catch (error) {
-        console.warn("A resposta não é um JSON válido.");
-        responseData = null;
-      }
-
-      throw new Error(
-        responseData?.message || "Erro desconhecido ao atualizar o Estoque"
-      );
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Erro ao atualizar: Status ${response.status}`);
     }
   } catch (error) {
-    console.error("Erro ao atualizar o Estoque:", error.message);
-    Alert.alert("Erro ao atualizar", `Detalhes: ${error.message}`);
+    console.error('Erro ao atualizar produto:', error.message);
+    Alert.alert('Erro', 'Ocorreu um erro ao tentar atualizar o produto.');
+    return null;
   }
 };
