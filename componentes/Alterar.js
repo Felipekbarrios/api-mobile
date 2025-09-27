@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { View, TextInput, Button, Alert } from "react-native";
-import { updateProdutos } from "./Api";
+import React, { useState, TextInput, Button, Alert } from 'react';
+import { View } from 'react-native'; // Adicionado View
+import { updateProdutos } from './Api'; // Modificado para './Api' se 'Api' for o nome do arquivo
 
 export default function Alterar({ route, navigation }) {
   const { produtos } = route.params;
+
   const [nome, setNome] = useState(produtos.nome);
   const [marca, setMarca] = useState(produtos.marca);
   const [preco, setPreco] = useState(produtos.preco);
@@ -16,24 +17,35 @@ export default function Alterar({ route, navigation }) {
     };
 
     Alert.alert(
-      "Confirmação",
-      "Tem certeza de que deseja alterar este Produto?",
+      'Confirmação',
+      'Tem certeza de que deseja alterar este Produto?',
       [
-        { text: "Cancelar", style: "cancel" },
+        { text: 'Cancelar', style: 'cancel' },
         {
-          text: "Alterar",
+          text: 'Alterar',
           onPress: () => updateProdutos(produtos.id, updatedData, navigation),
         },
-      ]
+      ],
     );
   };
 
   return (
     <View>
-      <TextInput placeholder="Produto" value={nome} onChangeText={setNome} />
-      <TextInput placeholder="Marca" value={marca} onChangeText={setMarca} />
-      <TextInput placeholder="Preco" value={preco} onChangeText={setPreco} />
-
+      <TextInput
+        placeholder="Produto"
+        onChangeText={setNome}
+        value={nome}
+      />
+      <TextInput
+        placeholder="Marca"
+        onChangeText={setMarca}
+        value={marca}
+      />
+      <TextInput
+        placeholder="Preço"
+        onChangeText={setPreco}
+        value={preco}
+      />
       <Button title="Alterar" onPress={handleUpdate} />
     </View>
   );
