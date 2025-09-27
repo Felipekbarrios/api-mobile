@@ -25,24 +25,25 @@ export default function Home({ navigation }) {
       },
     ]);
   };
+
   return (
-    <View style={StyleSheet.container}>
+    <View style={styles.container}>
       <FlatList
         data={registro}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <Card style={StyleSheet.card}>
-            <View style={StyleSheet.cardContent}>
+          <Card style={styles.card}>
+            <View style={styles.cardContent}>
               {/* Coluna da esquerda: texto */}
-              <View style={StyleSheet.infoColumn}>
-                <Text style={StyleSheet.title}>Código: {item.id}</Text>
+              <View style={styles.infoColumn}>
+                <Text style={styles.title}>Código: {item.id}</Text>
                 <Text>Produto: {item.produto}</Text>
                 <Text>Marca: {item.marca}</Text>
                 <Text>Valor: {item.valor}</Text>
               </View>
 
               {/* Coluna da direita: botões */}
-              <View style={StyleSheet.actionsColumn}>
+              <View style={styles.actionsColumn}>
                 <IconButton
                   icon="pencil"
                   size={24}
@@ -64,14 +65,15 @@ export default function Home({ navigation }) {
       />
 
       <TouchableOpacity
-        style={StyleSheet.floatingButton}
+        style={styles.floatingButton}
         onPress={() => navigation.navigate("Cadastro")}
       >
-        <Text style={StyleSheet.plusIcon}> + </Text>
+        <Text style={styles.plusIcon}> + </Text>
       </TouchableOpacity>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -103,19 +105,17 @@ const styles = StyleSheet.create({
   floatingButton: {
     position: "absolute",
     bottom: 20,
-    alignSelf: "center",
-    backgroundColor: "#27ae60",
+    right: 20,
+    backgroundColor: "#3498db",
+    borderRadius: 30,
     width: 60,
     height: 60,
-    borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
     elevation: 5,
   },
   plusIcon: {
+    fontSize: 28,
     color: "#fff",
-    fontSize: 32,
-    lineHeight: 36,
-    marginBottom: 2,
   },
 });
