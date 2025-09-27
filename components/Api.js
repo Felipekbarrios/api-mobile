@@ -18,7 +18,7 @@ export const fetchEstoque = async (setRegistros) => {
 
 export const createEstoque = async (EstoqueData) => {
   try {
-    const response = await fetch("https://apiestoque.webapptech.site/api/", {
+    const response = await fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -26,13 +26,11 @@ export const createEstoque = async (EstoqueData) => {
       body: JSON.stringify(EstoqueData),
     });
 
-    // Verifica se a API retornou status 204 (sem conteúdo)
     if (response.status === 204) {
       Alert.alert("Sucesso!", "Cadastro realizado com sucesso!");
       return {};
     }
 
-    // Caso a API retorne conteúdo, tentamos converter para JSON
     const textResponse = await response.text();
     console.log("Resposta bruta da API:", textResponse);
 
@@ -58,20 +56,15 @@ export const createEstoque = async (EstoqueData) => {
 
 export const deleteEstoque = async (EstoqueId, setRegistros, navigation) => {
   try {
-    const response = await fetch(
-      `https://apiestoque.webapptech.site/api/${EstoqueId}`,
-      {
-        method: "DELETE",
-      }
-    );
+    const response = await fetch(`${API_URL}/${EstoqueId}`, {
+      method: "DELETE",
+    });
 
-    // Verifica se a resposta foi bem-sucedida
     if (response.ok) {
       const responseData = await response.json();
 
       if (responseData.success) {
         Alert.alert("Sucesso!", responseData.message);
-        // Atualiza a lista localmente
         setRegistros((prevRegistros) => {
           const novaLista = prevRegistros.filter(
             (Estoques) => Estoques.codigo !== EstoqueId
@@ -83,7 +76,6 @@ export const deleteEstoque = async (EstoqueId, setRegistros, navigation) => {
         Alert.alert("Erro", responseData.message);
       }
     } else {
-      // Caso a resposta não seja ok, tenta processar a mensagem de erro
       const textResponse = await response.text();
       let responseData = null;
 
@@ -105,16 +97,13 @@ export const deleteEstoque = async (EstoqueId, setRegistros, navigation) => {
 
 export const updateEstoque = async (EstoqueId, updatedData, navigation) => {
   try {
-    const response = await fetch(
-      `https://apiestoque.webapptech.site/api/${EstoqueId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
-      }
-    );
+    const response = await fetch(`${API_URL}/${EstoqueId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedData),
+    });
 
     console.log("Dados enviados:", updatedData);
 
