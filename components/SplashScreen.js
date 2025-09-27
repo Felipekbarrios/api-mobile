@@ -11,18 +11,14 @@ const SplashScreen = ({ navigation }) => {
   }, [navigation]);
 
   return (
-    <View style={StyleSheet.splashContainer}>
+    <View style={styles.splashContainer}>
       <Image
         source={{
           uri: "https://ingresso-a.akamaihd.net/b2b/production/uploads/article/image/4057/e416561e5a8bc2f64884cc2402682f50.jpg",
         }}
-        style={StyleSheet.splashImage}
+        style={styles.splashImage}
       />
-      <ActivityIndicator
-        size="large"
-        color="#0000ff"
-        style={StyleSheet.loader}
-      />
+      <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
     </View>
   );
 };
