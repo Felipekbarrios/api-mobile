@@ -14,7 +14,7 @@ const SplashScreen = ({ navigation }) => {
     <View style={styles.splashContainer}>
       <Image
         source={{
-          uri: "https://ingresso-a.akamaihd.net/b2b/production/uploads/article/image/4057/e416561e5a8bc2f64884cc2402682f50.jpg",
+          uri: "https://raw.githubusercontent.com/Alunos-IFRS/api-mobile/main/assets/logo.png",
         }}
         style={styles.splashImage}
       />

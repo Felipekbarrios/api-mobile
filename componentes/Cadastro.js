@@ -3,29 +3,21 @@ import { View, TextInput, Button, Alert } from "react-native";
 import { createProdutos, updateProdutos } from "./Api";
 
 export default function Cadastro({ navigation }) {
-  const [registro, setRegistros] = useState([]);
-  const [nome, setNome] = useState("");
-  const [marca, setMarca] = useState("");
-  const [preco, setPreco] = useState("");
-
-  const [selectedProdutoId, setSelectedProdutoId] = useState(null);
+  const [nome, setNome] = useState('');
+  const [marca, setMarca] = useState('');
+  const [preco, setPreco] = useState('');
 
   const handleSubmit = async () => {
     if (!nome || !marca || !preco) {
-      Alert.alert("Atenção", "Preencha todos os campos antes de cadastrar.");
+      Alert.alert('Atenção', 'Preencha todos os campos antes de cadastrar.');
       return;
     }
 
     const newProduto = { nome, marca, preco };
-
-    if (selectedProdutoId) {
-      await updateProdutos(selectedProdutoId, newProduto);
-      setSelectedProdutoId(null);
-    } else {
       const addedProduto = await createProdutos(newProduto);
       if (addedProduto) {
-        Alert.alert("Sucesso!", "Cadastro realizado com sucesso!", [
-          { text: "OK", onPress: () => navigation.navigate("Home") },
+        Alert.alert('Sucesso!', 'Cadastro realizado com sucesso!', [
+          { text: 'OK', onPress: () => navigation.navigate('Home') },
         ]);
       }
     }
@@ -44,4 +36,4 @@ export default function Cadastro({ navigation }) {
       <Button title="Cadastrar" onPress={handleSubmit} />
     </View>
   );
-}
+

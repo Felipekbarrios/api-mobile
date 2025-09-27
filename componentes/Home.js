@@ -28,6 +28,7 @@ export default function Home({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.titulo}>Lista de Produtos:</Text>
       <FlatList
         data={registro}
         keyExtractor={(item) => item.id.toString()}
@@ -105,8 +106,8 @@ const styles = StyleSheet.create({
   floatingButton: {
     position: "absolute",
     bottom: 20,
-    right: 20,
-    backgroundColor: "#3498db",
+    alignSelf: "center",
+    backgroundColor: "#27ae60",
     borderRadius: 30,
     width: 60,
     height: 60,
@@ -114,8 +115,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     elevation: 5,
   },
+  titulo: {
+    fontSize: 40,
+    marginTop: 25,
+    marginBottom: 10,
+    textAlign: "center",
+  },
   plusIcon: {
     fontSize: 28,
     color: "#fff",
+    marginBottom: 2,
+    lineHeight: 36
   },
 });
