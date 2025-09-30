@@ -26,13 +26,12 @@ export const createEstoque = async (EstoqueData) => {
       body: JSON.stringify(EstoqueData),
     });
 
-    // Verifica se a API retornou status 204 (sem conteúdo)
+
     if (response.status === 204) {
       Alert.alert("Sucesso!", "Cadastro realizado com sucesso!");
       return {};
     }
 
-    // Caso a API retorne conteúdo, tentamos converter para JSON
     const textResponse = await response.text();
     console.log("Resposta bruta da API:", textResponse);
 
@@ -65,13 +64,11 @@ export const deleteEstoque = async (EstoqueId, setRegistros) => {
       }
     );
 
-    // Verifica se a resposta foi bem-sucedida
     if (response.ok) {
       const responseData = await response.json();
 
       if (responseData.success) {
         Alert.alert("Sucesso!", responseData.message);
-        // Atualiza a lista localmente
         setRegistros((prevRegistros) => {
           const novaLista = prevRegistros.filter(
             (Estoques) => Estoques.codigo !== EstoqueId
@@ -83,7 +80,7 @@ export const deleteEstoque = async (EstoqueId, setRegistros) => {
         Alert.alert("Erro", responseData.message);
       }
     } else {
-      // Caso a resposta não seja ok, tenta processar a mensagem de erro
+
       const textResponse = await response.text();
       let responseData = null;
 

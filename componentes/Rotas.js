@@ -11,10 +11,10 @@ export default function Rotas() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={Home} options={{ headerLeft: () => null }} />
-        <Stack.Screen name="Cadastro" component={Cadastro} />
-        <Stack.Screen name="Alterar" component={Alterar} />
+      <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Home" component={Home} options={{ headerLeft: () => null }} />
+      <Stack.Screen name="Cadastro" component={Cadastro} />
+      <Stack.Screen name="Alterar" component={Alterar} />
       </Stack.Navigator>
     </NavigationContainer>
   );
