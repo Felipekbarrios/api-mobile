@@ -1,9 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from '.././Componentes/Home';
-import Cadastro from '.././Componentes/Cadastro';
-import Alterar from '.././Componentes/Alterar';
-import SplashScreen from '.././Componentes/SplashScreen';
+import Home from './Home';
+import Cadastro from './Cadastro';
+import Alterar from './Alterar';
+import SplashScreen from './SplashScreen';
 
 const Stack = createNativeStackNavigator();
 
